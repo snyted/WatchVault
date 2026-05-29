@@ -26,40 +26,41 @@ import {
 import { MediaMapped } from "../interfaces/Media.js";
 
 
-export async function getMediaByIdFromTmdb(id: number, type: "movie" | "serie") {
+export async function getMediaByIdFromTmdb(id: number, type: MediaMapped['type']) {
   try {
     const { data } = await tmdbApi.get(`/${type}/${id}`);
     return mapTmdbData(data, type);
-  } catch (error) {
+  } catch (err: any) {
     throw new ApiError(
-      error.response?.status || 500,
+      err.response?.status || 500,
       "Erro ao buscar filme ou série"
     );
   }
 }
 
-export async function trendingFromTmdb(type: "movie" | "serie") {
+export async function trendingFromTmdb(type: MediaMapped['type']) {
   try {
     const { data } = await tmdbApi.get(`/trending/${type}/week`);
     return data.results.map((media: object) => mapTmdbData(media, type));
-  } catch (err) {
+  } catch (err: any) {
     console.error("Erro ao buscar dados do TMDB:", err.message);
   }
 }
 
-export async function getMediaFromTmdb(name) {
+export async function getMediaFromTmdb(name: string) {
   try {
     const { data } = await tmdbApi.get("/search/multi", {
       params: { query: name },
     });
     console.log(data);
     return data.results.map((media) => mapTmdbData(media, media.media_type));
-  } catch (err) {
+  } catch (err: any) {
     throw new ApiError(err, "Erro ao buscar filmes");
   }
 }
 
-export async function findOrCreateMedia(id, type) {
+export async function findOrCreateMedia(id: number, type: MediaMapped['type'
+]) {
   const existing = await findMediaOnDb(id, type);
   if (existing) return existing;
 
