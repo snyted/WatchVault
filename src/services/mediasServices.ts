@@ -1,7 +1,7 @@
 import tmdbApi from "../config/tmdb.js";
 import { ApiError } from "../utils/ApiError.js";
-import { mapTmdbData } from "../utils/mapTmdb.ts";
-import { mapPgData } from "../utils/mapPgData.ts";
+import { mapTmdbData } from "../utils/mapTmdb.js";
+import { mapPgData } from "../utils/mapPgData.js";
 
 import {
   deleteFavorite,
@@ -23,9 +23,10 @@ import {
   updateContent,
   insertContent,
 } from "../repository/reviewsRepo.js";
+import { MediaMapped } from "../interfaces/Media.js";
 
 
-export async function getMediaByIdFromTmdb(id, type) {
+export async function getMediaByIdFromTmdb(id: number, type: "movie" | "serie") {
   try {
     const { data } = await tmdbApi.get(`/${type}/${id}`);
     return mapTmdbData(data, type);
@@ -37,10 +38,10 @@ export async function getMediaByIdFromTmdb(id, type) {
   }
 }
 
-export async function trendingFromTmdb(type) {
+export async function trendingFromTmdb(type: "movie" | "serie") {
   try {
     const { data } = await tmdbApi.get(`/trending/${type}/week`);
-    return data.results.map((media) => mapTmdbData(media, type));
+    return data.results.map((media: object) => mapTmdbData(media, type));
   } catch (err) {
     console.error("Erro ao buscar dados do TMDB:", err.message);
   }
