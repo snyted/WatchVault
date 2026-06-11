@@ -9,21 +9,21 @@ import user from "./routes/userRoutes.js";
 import search from "./routes/searchRoutes.js";
 import movies from "./routes/moviesRoutes.js";
 import series from "./routes/seriesRoutes.js";
-import auth from "./routes/authRoutes.js";
+import auth from "./routes/auth.routes.js";
 
 const app = express();
 
-const PORT = process.env.PORT || 5432;
+const PORT: string = process.env.PORT || "3000";
 
 app.use(express.json());
 
 app.use(logGlobal);
 
-app.use("/me", user);
-app.use("/search", search);
-app.use("/movies", movies);
-app.use("/series", series);
-app.use("/auth", auth);
+app.use("/api/me", user);
+app.use("/api/search", search);
+app.use("/api/movies", movies);
+app.use("/api/series", series);
+app.use("/api/auth", auth);
 
 app.use(errorHandler);
 
