@@ -1,9 +1,0 @@
-CREATE TABLE IF NOT EXISTS review (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE, 
-  media_id INT NOT NULL REFERENCES media(id) ON DELETE CASCADE,
-  content TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE (user_id, media_id)
-)

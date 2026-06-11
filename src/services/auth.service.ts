@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserRepository } from "../repositories/user.repository.js";
 import { ApiError } from "../utils/ApiError.js";
-import { LoginResponse } from "../interfaces/auth.interface.js";
+import { LoginResponse } from "../dtos/login.dto.js";
 
 
 export class AuthService {
