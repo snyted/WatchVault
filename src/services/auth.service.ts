@@ -1,16 +1,16 @@
 import bcrypt from "bcrypt";
-import { findUserByName, createUser } from "../repository/userRepo.js";
 import jwt from "jsonwebtoken";
+import { UserRepository } from "../repositories/user.repository.js";
 import { ApiError } from "../utils/ApiError.js";
 import { LoginResponse } from "../interfaces/auth.interface.js";
 
 
 export class AuthService {
-  constructor() {
+  constructor(private userRepository: UserRepository) {
   }
 
   async register(user: string, password: string): Promise<boolean> {
-    const foundUser = await findUserByName(user)
+    const foundUser = await this.userRepository.find(user)
 
     if (foundUser) {
       throw new ApiError(400, "Usuário já existe.");
@@ -18,7 +18,7 @@ export class AuthService {
 
     const hash = await bcrypt.hash(password, 10);
 
-    await createUser(user, hash);
+    await this.userRepository.create(user, hash);
 
     return true;
 
@@ -29,7 +29,7 @@ export class AuthService {
       throw new ApiError(400, "Usuário e senha são obrigatórios.")
     }
 
-    const dbUser = await findUserByName(userInput)
+    const dbUser = await this.userRepository.find(userInput)
 
     if (!dbUser) {
       throw new ApiError(401, "Usuário ou senha incorretos.");
