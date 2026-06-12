@@ -7,8 +7,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 
 import user from "./routes/userRoutes.js";
 import search from "./routes/searchRoutes.js";
-import movies from "./routes/moviesRoutes.js";
-import series from "./routes/seriesRoutes.js";
+import medias from "./routes/media.routes.js";
 import auth from "./routes/auth.routes.js";
 
 const app = express();
@@ -21,8 +20,7 @@ app.use(logGlobal);
 
 app.use("/api/me", user);
 app.use("/api/search", search);
-app.use("/api/movies", movies);
-app.use("/api/series", series);
+app.use("/api/medias", medias);
 app.use("/api/auth", auth);
 
 app.use(errorHandler);
