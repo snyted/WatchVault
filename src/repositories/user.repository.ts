@@ -1,29 +1,28 @@
+import { User } from "@prisma/client";
 import prisma from "../config/prisma.js";
 
 export class UserRepository {
-  async find(name: string) {
+  async find(username: string): Promise<User | null> {
     try {
-      const user = await prisma.user.findUnique({
+      return await prisma.user.findUnique({
         where: {
-          name: name,
+          username: username,
         }
-      })
-      return user;
+      });
     } catch (error) {
       console.error("Erro ao buscar usuário por nome:", error);
       throw error;
     }
   }
-  async create(name: string, hashedPassword: string) {
+  async create(username: string, hashedPassword: string): Promise<User> {
     try {
-      const newUser = await prisma.user.create({
+      return await prisma.user.create({
         data: {
-          name: name,
+          username: username,
           password: hashedPassword,
         },
       });
 
-      return newUser;
     } catch (error) {
       console.error("Erro ao criar usuário:", error);
       throw error;
