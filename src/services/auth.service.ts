@@ -3,8 +3,7 @@ import jwt from "jsonwebtoken";
 import { UserRepository } from "../repositories/user.repository.js";
 import { ApiError } from "../utils/ApiError.js";
 import { RegisterDTO } from "../dtos/auth/register.dto.js";
-import { LoginResponseDTO } from "../dtos/auth/login.response.dto.js";
-import { LoginDTO } from "../dtos/auth/login.dto.js";
+import { LoginDTO, LoginResponseDTO } from "../dtos/auth/login.dto.js";
 
 export class AuthService {
   constructor(private userRepository: UserRepository) {
