@@ -22,6 +22,8 @@ CREATE TABLE "media" (
     "release_date" DATE,
     "poster_path" VARCHAR(255),
     "backdrop_path" VARCHAR(255),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "media_pkey" PRIMARY KEY ("id")
 );
@@ -32,6 +34,7 @@ CREATE TABLE "favorites" (
     "user_id" INTEGER NOT NULL,
     "media_id" INTEGER NOT NULL,
     "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "favorites_pkey" PRIMARY KEY ("id")
 );
@@ -44,6 +47,7 @@ CREATE TABLE "assessments" (
     "rate" INTEGER NOT NULL,
     "review" TEXT,
     "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "assessments_pkey" PRIMARY KEY ("id")
 );
