@@ -6,7 +6,6 @@ import logGlobal from "./middlewares/logGlobal.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 import user from "./routes/userRoutes.js";
-import search from "./routes/searchRoutes.js";
 import medias from "./routes/media.routes.js";
 import auth from "./routes/auth.routes.js";
 
@@ -19,7 +18,6 @@ app.use(express.json());
 app.use(logGlobal);
 
 app.use("/api/me", user);
-app.use("/api/search", search);
 app.use("/api/medias", medias);
 app.use("/api/auth", auth);
 
