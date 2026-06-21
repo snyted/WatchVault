@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserRepository } from "../repositories/user.repository.js";
-import { ApiError } from "../utils/ApiError.js";
+import { ApiError } from "../utils/api-error.util.js";
 import { RegisterDTO } from "../dtos/auth/register.dto.js";
 import { LoginDTO, LoginResponseDTO } from "../dtos/auth/login.dto.js";
 
