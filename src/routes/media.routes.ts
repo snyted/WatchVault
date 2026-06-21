@@ -11,9 +11,10 @@ const mediaProvider = new TMDBProvider()
 const mediaService = new MediaService(mediaRepository, mediaProvider)
 const mediaController = new MediaController(mediaService);
 
-router.get("/", mediaController.getTrending());
+router.get("/", mediaController.getTrending);
+router.get("/search", mediaController.search)
 
-// router.get("/:id", mediasController.findMediaById);
+router.get("/:id", mediaController.findMediaById);
 // router.post("/:id/favorite", authenticate, toggleFavoriteController);
 // router.put("/:id/rate", authenticate, putRate);
 // router.put("/:id/review", authenticate, putReview);
