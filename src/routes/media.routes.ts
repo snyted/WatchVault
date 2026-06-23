@@ -15,8 +15,8 @@ router.get("/", mediaController.getTrending);
 router.get("/search", mediaController.search)
 
 router.get("/:id", mediaController.findMediaById);
-// router.post("/:id/favorite", authenticate, toggleFavoriteController);
-// router.put("/:id/rate", authenticate, putRate);
-// router.put("/:id/review", authenticate, putReview);
+router.post("/:id/favorite", mediaController.toggleFavorite);
+router.put("/:id/rate", mediaController.putRate);
+router.put("/:id/review", mediaController.putReview);
 
 export default router;
