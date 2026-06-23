@@ -3,7 +3,7 @@ export interface TMDBRawResult {
     title?: string;
     name?: string;
     overview: string | null;
-    releaseDate?: string;
+    release_date?: string;
     poster_path?: string | null;
     backdrop_path?: string | null,
     media_type: string;
