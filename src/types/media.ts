@@ -1,10 +1,10 @@
 import { MediaType } from "@prisma/client";
 
 export interface AppMedia {
-    tmdbId: string,
-    title?: string,
+    tmdbId: number,
+    title: string,
     overview: string,
-    releaseDate: string,
+    releaseDate: string | null,
     posterPath: string | null,
     backdropPath: string | null,
     type: MediaType,

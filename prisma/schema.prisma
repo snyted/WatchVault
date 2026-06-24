@@ -12,7 +12,7 @@ model User {
   username String @unique @db.VarChar(100)
   password String @db.VarChar(100)
 
-  createAt DateTime @default(now()) @map("create_at")
+  createdAt DateTime @default(now()) @map("create_at")
   updateAt DateTime @updatedAt @map("update_at")
 
   favorites   Favorite[]
@@ -31,12 +31,12 @@ model Media {
   tmdbId       Int       @map("tmdb_id")
   type         MediaType
   title        String    @db.VarChar(255)
-  overview     String?   @db.Text
+  overview     String   @db.Text
   releaseDate  DateTime? @map("release_date") @db.Date
   posterPath   String?   @map("poster_path") @db.VarChar(255)
   backdropPath String?   @map("backdrop_path") @db.VarChar(255)
 
-  createAt  DateTime @default(now()) @map("created_at")
+  createdAt  DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   favorites   Favorite[]
@@ -54,7 +54,7 @@ model Favorite {
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
 
-  createAt  DateTime @default(now()) @map("create_at")
+  createdAt  DateTime @default(now()) @map("create_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([userId, mediaId])
@@ -71,7 +71,7 @@ model Assessment {
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
 
-  createAt  DateTime @default(now()) @map("create_at")
+  createdAt  DateTime @default(now()) @map("create_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([userId, mediaId])
