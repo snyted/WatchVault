@@ -2,10 +2,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import logGlobal from "./middlewares/logGlobal.js";
-import { errorHandler } from "./middlewares/errorHandler.js";
+import logGlobal from "./middlewares/log-global.middleware.js";
+import { errorHandler } from "./middlewares/error-handler.middleware.js";
 
-import user from "./routes/userRoutes.js";
+import user from "./routes/user.routes.js";
 import media from "./routes/media.routes.js";
 import auth from "./routes/auth.routes.js";
 
