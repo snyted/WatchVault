@@ -1,8 +1,9 @@
-import tmdbApi from "../../config/tmdb.js";
+import { MediaType } from "@prisma/client";
 import { ApiError } from "../../errors/api.error.js";
 import { AppMedia } from "../../types/media.js";
 import { mapTmdbData } from "./tmdb.mapper.js";
 import { TMDBRawResult } from "./tmdb.types.js";
+import tmdbApi from "../../config/tmdb.js";
 
 export class TMDBProvider {
     async getMediaById(id: string, type: string): Promise<AppMedia> {
@@ -17,13 +18,12 @@ export class TMDBProvider {
         }
     }
 
-    async getTrending(type: string): Promise<AppMedia> {
+    async getTrending(type: MediaType): Promise<AppMedia[]> {
         try {
             const { data } = await tmdbApi.get(`/trending/${type}/week`);
-            return data.results.map((media: TMDBRawResult) => mapTmdbData(media));
-        } catch (err: any) {
-            console.error("Erro ao buscar dados do TMDB:", err.message);
-            throw new ApiError(500, "Erro ao buscar tendências");
+            return data.results.map((m: TMDBRawResult) => mapTmdbData(m));
+        } catch (error: any) {
+            throw new ApiError(500, "Erro ao buscar trendings do Provider.");
         }
     }
 
