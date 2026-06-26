@@ -3,12 +3,11 @@ import {
   MediaService,
 } from "../services/media.service.js";
 import { ApiError } from "../errors/api.error.js";
-
-import { validateMedia } from "../utils/validators.js";
-import { Media, MediaType } from "@prisma/client";
+import { MediaType } from "@prisma/client";
 import { UpdateRateDTO } from "../dtos/media/update-rate.dto.js";
 import { ToggleFavoriteDTO } from "../dtos/media/toggle-favorite.dto.js";
 import { UpdateReviewDTO } from "../dtos/media/update-review.dto.js";
+import { AppMedia } from "../types/media.js";
 
 export interface MediaRequestQuery {
   type?: string;
@@ -19,6 +18,8 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {
   }
 
+
+  //  ==== Media Context ====
   public trending = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const type: MediaType = this.getType(req);
@@ -33,8 +34,9 @@ export class MediaController {
     try {
       const id = req.params.id as string
       const type: MediaType = this.getType(req)
-      const media: Media = await this.mediaService.find(id, type);
-      validateMedia(media);
+      const media: AppMedia = await this.mediaService.find(id, type);
+
+      if (!media) throw new ApiError(404, "Filme/Série não encontrados!");
       res.status(200).json(media);
     } catch (error) {
       next(error);
@@ -55,6 +57,8 @@ export class MediaController {
     }
   }
 
+
+  // ==== User-Media Interactions ====
   public toggleFavorite = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const favoriteDTO: ToggleFavoriteDTO = {
@@ -115,29 +119,31 @@ export class MediaController {
         throw new ApiError(204, "Review não fornecida. Verifique o formato.")
       }
 
-      const { message, data } = await this.mediaService.upsertReview(reviewDTO);
+      const upserted = await this.mediaService.upsertReview(reviewDTO);
 
-      res.json({ message, data });
+      res.json({ upserted });
     } catch (err) {
       next(err);
     }
   }
 
-  showFavorites = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { id } = req.body;
+
+  // User Context
+  public showRates = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const id = req.body.id as number;
+
     try {
-      const result = await this.mediaService.showFavorites(id);
+      const result = await this.mediaService.rates(id);
       res.json(result);
     } catch (err) {
       next(err);
     }
   }
 
-  showRates = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public showFavorites = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.body;
-
     try {
-      const result = await this.mediaService.showRates(id);
+      const result = await this.mediaService.favorites(id);
       res.json(result);
     } catch (err) {
       next(err);
@@ -145,16 +151,17 @@ export class MediaController {
   }
 
   showReviews = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { id } = req.body;
-
     try {
-      const result = await this.mediaService.showReviews(id);
+      const { id } = req.body;
+      const result = await this.mediaService.reviews(id);
       res.json(result);
     } catch (err) {
       next(err);
     }
 
   }
+
+
 
   private getType = (req: Request) => {
 
