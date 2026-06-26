@@ -1,15 +1,24 @@
 import { LoginDTO } from "../dtos/auth/login.dto.js";
 import { RegisterDTO } from "../dtos/auth/register.dto.js";
+import { ApiError } from "../errors/api.error.js";
 import { AuthService } from "../services/auth.service.js";
 import { Request, Response, NextFunction } from 'express';
 
 export class AuthController {
   constructor(private authService: AuthService) { }
 
-  register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const data: RegisterDTO = req.body;
-
+  public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const data: RegisterDTO = req.body;
+
+      if (!data.hasOwnProperty("username") || !data.hasOwnProperty("password") || !data.hasOwnProperty("confirmPassword")) {
+        throw new ApiError(400, "Missing register fields. Verify the keys names.")
+      }
+
+      if (!data.username || !data.password || !data.confirmPassword) {
+        throw new ApiError(400, "Wrong fields. Verify the keys names")
+      }
+
       await this.authService.register(data);
 
       res.status(201).json({ message: "Cadastro efetuado com sucesso!" });

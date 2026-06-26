@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserRepository } from "../repositories/user.repository.js";
-import { ApiError } from "../utils/api-error.util.js";
+import { ApiError } from "../errors/api.error.js";
 import { RegisterDTO } from "../dtos/auth/register.dto.js";
 import { LoginDTO, LoginResponseDTO } from "../dtos/auth/login.dto.js";
 
@@ -9,16 +9,20 @@ export class AuthService {
   constructor(private userRepository: UserRepository) {
   }
 
-  async register(data: RegisterDTO): Promise<boolean> {
+  public async register(data: RegisterDTO): Promise<boolean> {
 
     if (data.password !== data.confirmPassword) {
-      throw new ApiError(401, "As senhas não coincidem")
+      throw new ApiError(400, "Unmatching passwords.")
+    }
+
+    if (data.password.length < 8 || data.password.length > 64) {
+      throw new ApiError(400, "Invalid password. Try at least 8 characters.")
     }
 
     const foundUser = await this.userRepository.find(data.username)
 
     if (foundUser) {
-      throw new ApiError(400, "Usuário já existe.");
+      throw new ApiError(400, "User already exists.");
     }
 
     const hash = await bcrypt.hash(data.password, 10);
