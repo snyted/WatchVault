@@ -33,12 +33,11 @@ export class FavoriteRepositoy {
             }
         });
 
-        if(!favs) {
+        if (!favs) {
             return null;
         }
 
-        const favsMapped = favs.map((fav) => { FavoriteStorageMapper.toDomain(fav) })
-        return favsMapped
+        return favs.map((fav) => FavoriteStorageMapper.toDomain(fav))
     }
 
 }
