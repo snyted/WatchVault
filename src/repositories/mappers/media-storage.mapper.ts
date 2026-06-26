@@ -7,7 +7,7 @@ export class MediaStorageMapper {
             tmdbId: data.tmdbId,
             title: data.title,
             overview: data.overview,
-            releaseDate: (data.releaseDate?.toString()) || null,
+            releaseDate: (data.releaseDate?.toISOString()) || null,
             posterPath: data.posterPath || null,
             backdropPath: data.backdropPath || null,
             type: data.type,
@@ -20,7 +20,7 @@ export class MediaStorageMapper {
             title: data.title,
             overview: data.overview,
             type: data.type,
-            releaseDate: data.releaseDate && new Date(data.releaseDate),
+            releaseDate: data.releaseDate ? new Date(data.releaseDate) : null,
             posterPath: data.posterPath,
             backdropPath: data.backdropPath
         }
