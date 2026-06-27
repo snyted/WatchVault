@@ -1,7 +1,6 @@
-import { LoginDTO } from "../dtos/auth/login.dto.js";
-import { RegisterDTO } from "../dtos/auth/register.dto.js";
-import { ApiError } from "../errors/api.error.js";
-import { AuthService } from "../services/auth.service.js";
+import { LoginDTO, RegisterDTO } from "./auth.dtos.js";
+import { ApiError } from "../../shared/errors/api.error.js";
+import { AuthService } from "./auth.service.js";
 import { Request, Response, NextFunction } from 'express';
 
 export class AuthController {

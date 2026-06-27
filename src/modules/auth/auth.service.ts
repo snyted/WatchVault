@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserRepository } from "../repositories/user.repository.js";
-import { ApiError } from "../errors/api.error.js";
-import { RegisterDTO } from "../dtos/auth/register.dto.js";
-import { LoginDTO, LoginResponseDTO } from "../dtos/auth/login.dto.js";
+import { UserRepository } from "../user/user.repository.js";
+import { ApiError } from "../../shared/errors/api.error.js";
+import { LoginDTO, LoginResponseDTO, RegisterDTO } from "./auth.dtos.js";
 
 export class AuthService {
   constructor(private userRepository: UserRepository) {

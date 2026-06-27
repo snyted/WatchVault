@@ -1,15 +1,15 @@
 
-import { ApiError } from "../errors/api.error.js"
+import { ApiError } from "../../shared/errors/api.error.js"
 import {
     MediaRepository,
-} from "../repositories/media.repository.js";
-import { TMDBProvider } from "../providers/tmdb/tmdb.provider.js";
+} from "./media.repository.js";
+import { TMDBProvider } from "../../shared/providers/tmdb/tmdb.provider.js";
 import { MediaType } from "@prisma/client";
-import { AppMedia } from "../types/media.js";
-import { UpdateReviewDTO } from "../dtos/media/update-review.dto.js";
-import { ToggleFavoriteDTO } from "../dtos/media/toggle-favorite.dto.js";
-import { UpdateRateDTO } from "../dtos/media/update-rate.dto.js";
-import { FavoriteRepositoy } from "../repositories/favorite.repository.js";
+import { AppMedia } from "./media.types.js";
+import { UpdateReviewDTO } from "../review/update-review.dto.js";
+import { ToggleFavoriteDTO } from "../favorite/toggle-favorite.dto.js";
+import { UpdateRateDTO } from "../rating/update-rate.dto.js";
+import { FavoriteRepositoy } from "../favorite/favorite.repository.js";
 
 
 export class MediaService {
@@ -34,15 +34,15 @@ export class MediaService {
         return await this.mediaProvider.search(query)
     }
 
-    public async rates(userId: number) {
-        const rates = await this.mediaRepository.findRates(userId);
+    // public async rates(userId: number) {
+    //     const rates = await this.mediaRepository.findRates(userId);
 
-        if (!rates.length) {
-            throw new ApiError(404, "Usuário ainda não adicionou nenhuma nota.");
-        }
+    //     if (!rates.length) {
+    //         throw new ApiError(404, "Usuário ainda não adicionou nenhuma nota.");
+    //     }
 
-        return rates;
-    }
+    //     return rates;
+    // }
 
 
     public async favorites(userId: string): Promise<any> {

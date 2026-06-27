@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import prisma from "../config/prisma.js";
+import prisma from "../../shared/config/prisma.js";
 
 export class UserRepository {
   async find(username: string): Promise<User | null> {

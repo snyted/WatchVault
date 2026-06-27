@@ -1,6 +1,6 @@
 import { MediaType } from "@prisma/client";
 import { ApiError } from "../../errors/api.error.js";
-import { AppMedia } from "../../types/media.js";
+import { AppMedia } from "../../../modules/media/media.types.js";
 import { mapTmdbData } from "./tmdb.mapper.js";
 import { TMDBRawResult } from "./tmdb.types.js";
 import tmdbApi from "../../config/tmdb.js";

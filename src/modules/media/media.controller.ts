@@ -1,18 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import {
   MediaService,
-} from "../services/media.service.js";
-import { ApiError } from "../errors/api.error.js";
+} from "./media.service.js";
+import { ApiError } from "../../shared/errors/api.error.js";
 import { MediaType } from "@prisma/client";
-import { UpdateRateDTO } from "../dtos/media/update-rate.dto.js";
-import { ToggleFavoriteDTO } from "../dtos/media/toggle-favorite.dto.js";
-import { UpdateReviewDTO } from "../dtos/media/update-review.dto.js";
-import { AppMedia } from "../types/media.js";
+import { UpdateRateDTO } from "../rating/update-rate.dto.js";
+import { ToggleFavoriteDTO } from "../favorite/toggle-favorite.dto.js";
+import { UpdateReviewDTO } from "../review/update-review.dto.js";
+import { AppMedia, MediaRequestQuery } from "./media.types.js";
 
-export interface MediaRequestQuery {
-  type?: string;
-  page?: string;
-}
 
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {
@@ -129,16 +125,16 @@ export class MediaController {
 
 
   // User Context
-  public showRates = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const id = req.body.id as number;
+  // public showRates = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  //   const id = req.body.id as number;
 
-    try {
-      const result = await this.mediaService.rates(id);
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  }
+  //   try {
+  //     const result = await this.mediaService.rates(id);
+  //     res.json(result);
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // }
 
   public showFavorites = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.body;

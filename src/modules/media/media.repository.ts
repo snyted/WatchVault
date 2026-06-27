@@ -1,10 +1,18 @@
 import { MediaType } from "@prisma/client";
-import prisma from "../config/prisma.js";
-import { AppMedia } from "../types/media.js";
-import { MediaStorageMapper } from "./mappers/media-storage.mapper.js";
+import prisma from "../../shared/config/prisma.js";
+import { AppMedia } from "./media.types.js";
+import { MediaMapper } from "./media.mapper.js";
 
 
 export class MediaRepository {
+    public async create(data: AppMedia): Promise<AppMedia> {
+        const prismaInput = MediaMapper.toPrisma(data)
+        const created = await prisma.media.create({
+            data: prismaInput
+        })
+        return MediaMapper.toDomain(created)
+    }
+
     public async find(tmdbId: number, type: MediaType): Promise<AppMedia | null> {
         const found = await prisma.media.findUnique({
             where: {
@@ -17,15 +25,7 @@ export class MediaRepository {
         );
 
         if (!found) return null
-        return MediaStorageMapper.toDomain(found)
-    }
-
-    public async create(data: AppMedia): Promise<AppMedia> {
-        const prismaInput = MediaStorageMapper.toPrisma(data)
-        const created = await prisma.media.create({
-            data: prismaInput
-        })
-        return MediaStorageMapper.toDomain(created)
+        return MediaMapper.toDomain(found)
     }
 }
 

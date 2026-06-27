@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import pool from "../../shared/config/prisma.js";
 
 export async function findAllUserRates(userId) {
   const result = await pool.query(

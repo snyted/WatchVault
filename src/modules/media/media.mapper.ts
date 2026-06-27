@@ -1,7 +1,7 @@
 import { Media, Prisma } from "@prisma/client";
-import { AppMedia } from "../../types/media.js";
+import { AppMedia } from "./media.types.js";
 
-export class MediaStorageMapper {
+export class MediaMapper {
     static toDomain(data: Media): AppMedia {
         return {
             tmdbId: data.tmdbId,

@@ -1,4 +1,4 @@
-import { AppMedia } from "../../types/media.js";
+import { AppMedia } from "../../../modules/media/media.types.js";
 import { TMDBRawResult } from "./tmdb.types.js";
 
 

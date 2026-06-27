@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
-import prisma from "../config/prisma.js";
-import { AppFavorite } from "../types/favorite.js";
-import { FavoriteStorageMapper } from "./mappers/favorite-storage.mapper.js";
+import prisma from "../../shared/config/prisma.js";
+import { AppFavorite } from "./favorite.types.js";
+import { FavoriteMapper } from "./favorite.mapper.js";
 
 export type FavoriteWithMediaPrisma = Prisma.FavoriteGetPayload<{ include: { media: true } }>
 
@@ -37,7 +37,7 @@ export class FavoriteRepositoy {
             return null;
         }
 
-        return favs.map((fav) => FavoriteStorageMapper.toDomain(fav))
+        return favs.map((fav) => FavoriteMapper.toDomain(fav))
     }
 
 }
