@@ -12,7 +12,7 @@ model User {
   username String @unique @db.VarChar(100)
   password String @db.VarChar(100)
 
-  createdAt DateTime @default(now()) @map("create_at")
+  createdAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("update_at")
 
   favorites   Favorite[]
@@ -54,7 +54,7 @@ model Favorite {
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime @default(now()) @map("create_at")
+  createdAt  DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([userId, mediaId])
@@ -71,7 +71,7 @@ model Assessment {
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime @default(now()) @map("create_at")
+  createdAt  DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([userId, mediaId])
