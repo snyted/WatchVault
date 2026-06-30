@@ -1,85 +1,29 @@
 
-import { ApiError } from "../../shared/errors/api.error.js"
-import {
-    MediaRepository,
-} from "./media.repository.js";
 import { TMDBProvider } from "../../shared/providers/tmdb/tmdb.provider.js";
-import { MediaType } from "@prisma/client";
-import { AppMedia } from "./media.types.js";
-import { UpdateReviewDTO } from "../review/update-review.dto.js";
-import { ToggleFavoriteDTO } from "../favorite/toggle-favorite.dto.js";
-import { UpdateRateDTO } from "../rating/update-rate.dto.js";
-import { FavoriteRepositoy } from "../favorite/favorite.repository.js";
+import { AppMedia, AppMediaType, IMediaRepository } from "./media.types.js";
 
 
 export class MediaService {
-    constructor(private readonly mediaRepository: MediaRepository, private readonly mediaProvider: TMDBProvider,
-        private readonly favoriteRepository: FavoriteRepositoy) { }
+    public constructor(private readonly mediaRepository: IMediaRepository, private readonly mediaProvider: TMDBProvider) { }
 
-    public trending(type: MediaType): Promise<AppMedia[]> {
+    public trending(type: AppMediaType): Promise<AppMedia[]> {
         return this.mediaProvider.getTrending(type)
-    }
-
-    public async find(id: string, type: MediaType): Promise<AppMedia> {
-        const domainMedia = await this.mediaRepository.find(Number(id), type);
-        if (domainMedia) return domainMedia;
-
-        const dataProvider = await this.mediaProvider.getMediaById(id, type);
-
-        return await this.mediaRepository.create(dataProvider);
-
     }
 
     public async search(query: string): Promise<any> {
         return await this.mediaProvider.search(query)
     }
 
-    // public async rates(userId: number) {
-    //     const rates = await this.mediaRepository.findRates(userId);
+    public async find(id: string, type: AppMediaType): Promise<AppMedia> {
+        const domainMedia = await this.mediaRepository.findById(Number(id), type);
+        if (domainMedia) return domainMedia;
 
-    //     if (!rates.length) {
-    //         throw new ApiError(404, "Usuário ainda não adicionou nenhuma nota.");
-    //     }
+        const dataProvider = await this.mediaProvider.getMediaById(id, type);
 
-    //     return rates;
-    // }
-
-
-    public async favorites(userId: string): Promise<any> {
-        const favorites = await this.favoriteRepository.show(Number(userId));
-
-        if (!favorites) {
-            throw new ApiError(404, "Usuário não favoritou nenhum filme/serie ainda!");
-        }
-
-        return favorites;
+        return await this.mediaRepository.insert(dataProvider);
     }
 
-    public async toggleFavorite(favorite: ToggleFavoriteDTO) {
-        const media = await this.mediaRepository.find(favorite.mediaId, favorite.mediaType);
 
-        const existing = await this.favoriteRepository.find(favorite.userId, favorite.mediaId);
-
-        if (existing) {
-            await this.favoriteRepository.delete(favorite.userId, favorite.mediaId);
-            return { favorited: false, media };
-        }
-
-        const inserted = await this.favoriteRepository.insert(favorite.userId, favorite.mediaId);
-        return { favorited: true, favorite: inserted, media };
-    }
-
-    public async reviews(id: string) {
-
-    }
-
-    public async upsertReview(review: UpdateReviewDTO) {
-
-    }
-
-    public async upsertRate(rate: UpdateRateDTO) {
-
-    }
 }
 
 
