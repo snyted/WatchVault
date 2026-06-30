@@ -6,7 +6,7 @@ CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "username" VARCHAR(100) NOT NULL,
     "password" VARCHAR(100) NOT NULL,
-    "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -18,7 +18,7 @@ CREATE TABLE "media" (
     "tmdb_id" INTEGER NOT NULL,
     "type" "MediaType" NOT NULL,
     "title" VARCHAR(255) NOT NULL,
-    "overview" TEXT,
+    "overview" TEXT NOT NULL,
     "release_date" DATE,
     "poster_path" VARCHAR(255),
     "backdrop_path" VARCHAR(255),
@@ -33,7 +33,7 @@ CREATE TABLE "favorites" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
     "media_id" INTEGER NOT NULL,
-    "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "favorites_pkey" PRIMARY KEY ("id")
@@ -46,7 +46,7 @@ CREATE TABLE "assessments" (
     "media_id" INTEGER NOT NULL,
     "rate" INTEGER NOT NULL,
     "review" TEXT,
-    "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "assessments_pkey" PRIMARY KEY ("id")
