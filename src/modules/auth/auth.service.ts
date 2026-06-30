@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserRepository } from "../user/user.repository.js";
 import { ApiError } from "../../shared/errors/api.error.js";
 import { LoginDTO, LoginResponseDTO, RegisterDTO } from "./auth.dtos.js";
+import { IUserRepository } from "../user/user.types.js";
 
 export class AuthService {
-  constructor(private userRepository: UserRepository) {
+  constructor(private userRepository: IUserRepository) {
   }
 
   public async register(data: RegisterDTO): Promise<boolean> {
@@ -18,9 +18,9 @@ export class AuthService {
       throw new ApiError(400, "Invalid password. Try at least 8 characters.")
     }
 
-    const foundUser = await this.userRepository.find(data.username)
+    const isFounded = await this.userRepository.find(data.username)
 
-    if (foundUser) {
+    if (isFounded) {
       throw new ApiError(400, "User already exists.");
     }
 
