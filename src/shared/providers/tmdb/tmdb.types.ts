@@ -1,7 +1,7 @@
 import { MediaType } from "@prisma/client";
 
-export interface TMDBRawResult {
-    id: string;
+export interface TMDBMediaResult {
+    id: number;
     title?: string;
     name?: string;
     overview: string;
