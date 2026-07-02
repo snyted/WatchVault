@@ -8,7 +8,7 @@ export function mapTMDB(raw: TMDBMediaResult, type?: MediaType): AppMedia {
     tmdbId: raw.id,
     title: raw.title ?? raw.name ?? '',
     overview: raw.overview,
-    releaseDate: raw.release_date || null,
+    releaseDate: raw.release_date,
     posterPath: raw.poster_path || null,
     backdropPath: raw.backdrop_path || null,
     type: type ?? raw.media_type,
