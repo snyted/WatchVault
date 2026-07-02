@@ -12,7 +12,7 @@ export interface AppMedia {
     tmdbId: number,
     title: string,
     overview: string,
-    releaseDate: string | null,
+    releaseDate: string,
     posterPath: string | null,
     backdropPath: string | null,
     type: MediaType,

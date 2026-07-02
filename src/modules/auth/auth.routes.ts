@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { AuthController } from "./auth.controller.js";
 import { AuthService } from "./auth.service.js";
-import { UserRepository } from "../user/user.repository.js";
+import { UserRepositoryPrisma } from "../user/user.repository.js";
 
 const router = Router();
 
-const userRepository = new UserRepository()
+const userRepository = new UserRepositoryPrisma()
 const authService = new AuthService(userRepository)
 const authController = new AuthController(authService);
 

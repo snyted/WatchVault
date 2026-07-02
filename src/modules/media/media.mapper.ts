@@ -7,7 +7,7 @@ export class MediaMapper {
             tmdbId: data.tmdbId,
             title: data.title,
             overview: data.overview,
-            releaseDate: (data.releaseDate?.toISOString()) || null,
+            releaseDate: (data.releaseDate?.toLocaleDateString("pt-br")),
             posterPath: data.posterPath || null,
             backdropPath: data.backdropPath || null,
             type: data.type,
@@ -20,7 +20,7 @@ export class MediaMapper {
             title: data.title,
             overview: data.overview,
             type: data.type,
-            releaseDate: data.releaseDate ? new Date(data.releaseDate) : null,
+            releaseDate: new Date(data.releaseDate),
             posterPath: data.posterPath,
             backdropPath: data.backdropPath
         }

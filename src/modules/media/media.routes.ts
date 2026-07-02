@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { mediaController } from "./media.container.js"
-import { assessmentController } from "../assessment/assessment.container.js";
 
 const router = Router();
 
