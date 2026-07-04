@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import {
   MediaService,
 } from "./media.service.js";
-import { ApiError } from "../../shared/errors/api.error.js";
+import { AppError } from "../../shared/errors/app.error.js";
 import { MediaType } from "@prisma/client";
 import { AppMedia, MediaRequestQuery } from "./media.types.js";
 
@@ -41,7 +41,7 @@ export class MediaController {
       const type: MediaType = this.getType(req)
       const media: AppMedia = await this.mediaService.find(Number(id), type);
 
-      if (!media) throw new ApiError(404, "Filme/Série não encontrados!");
+      if (!media) throw new AppError(404, "Filme/Série não encontrados!");
       res.status(200).json(media);
     } catch (error) {
       next(error);
@@ -53,7 +53,7 @@ export class MediaController {
     const { type } = req.query as MediaRequestQuery
 
     if (type !== 'movie' && type !== 'tv') {
-      throw new ApiError(400, "Tipo inválido. Tente 'movie' ou 'tv'")
+      throw new AppError(400, "Tipo inválido. Tente 'movie' ou 'tv'")
     }
     return type as MediaType
   }

@@ -7,10 +7,10 @@ export class MediaMapper {
             tmdbId: data.tmdbId,
             title: data.title,
             overview: data.overview,
+            type: data.type,
             releaseDate: (data.releaseDate?.toLocaleDateString("pt-br")),
             posterPath: data.posterPath || null,
             backdropPath: data.backdropPath || null,
-            type: data.type,
         }
     }
 

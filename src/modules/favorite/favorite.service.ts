@@ -1,4 +1,4 @@
-import { ApiError } from "../../shared/errors/api.error.js";
+import { AppError } from "../../shared/errors/app.error.js";
 import { AppFavorite, IFavoriteRepository, ToggleFavoriteDTO } from "./favorite.types.js";
 
 export class FavoriteService {
@@ -8,7 +8,7 @@ export class FavoriteService {
         const favorites = await this.favoriteRepository.userList(Number(userId));
 
         if (!favorites) {
-            throw new ApiError(404, "Usuário não favoritou nenhum filme/serie ainda!");
+            throw new AppError(404, "Usuário não favoritou nenhum filme/serie ainda!");
         }
 
         return favorites;

@@ -1,5 +1,5 @@
 import { LoginDTO, RegisterDTO } from "./auth.dtos.js";
-import { ApiError } from "../../shared/errors/api.error.js";
+import { AppError } from "../../shared/errors/app.error.js";
 import { AuthService } from "./auth.service.js";
 import { Request, Response, NextFunction } from 'express';
 
@@ -10,12 +10,8 @@ export class AuthController {
     try {
       const data: RegisterDTO = req.body;
 
-      if (!data.hasOwnProperty("username") || !data.hasOwnProperty("password") || !data.hasOwnProperty("confirmPassword")) {
-        throw new ApiError(400, "Missing register fields. Verify the keys names.")
-      }
-
       if (!data.username || !data.password || !data.confirmPassword) {
-        throw new ApiError(400, "Wrong fields. Verify the keys names")
+        throw new AppError(400, "Wrong fields. Verify the keys names")
       }
 
       await this.authService.register(data);
@@ -27,9 +23,12 @@ export class AuthController {
   };
 
   login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const data: LoginDTO = req.body
-
     try {
+      const data: LoginDTO = req.body
+      if (!data.username || !data.password) {
+        throw new AppError(400, "Missing Fields");
+      }
+
       const { token, username } = await this.authService.login(data)
 
       res.status(200).json({

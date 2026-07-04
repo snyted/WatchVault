@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { AssessmentService } from "./assessment.service.js";
 import { UpsertReviewDTO } from "./assessment.types.js";
 import { MediaRequestQuery } from "../media/media.types.js";
-import { ApiError } from "../../shared/errors/api.error.js";
+import { AppError } from "../../shared/errors/app.error.js";
 import { MediaType } from "@prisma/client";
 
 export class AssessmentController {
@@ -41,7 +41,7 @@ export class AssessmentController {
         const { type } = req.query as MediaRequestQuery
 
         if (type !== 'movie' && type !== 'tv') {
-            throw new ApiError(400, "Tipo inválido. Tente 'movie' ou 'tv'")
+            throw new AppError(400, "Tipo inválido. Tente 'movie' ou 'tv'")
         }
         return type as MediaType
     }

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { FavoriteService } from "./favore.service.js";
 import { ToggleFavoriteDTO } from "./favorite.types.js";
 import { MediaRequestQuery } from "../media/media.types.js";
-import { ApiError } from "../../shared/errors/api.error.js";
+import { AppError } from "../../shared/errors/app.error.js";
 import { MediaType } from "@prisma/client";
 
 export class FavoriteController {
@@ -30,7 +30,7 @@ export class FavoriteController {
             }
 
             if (!favoriteDTO.mediaId || !favoriteDTO.mediaType) {
-                throw new ApiError(400, "Verifique os campos do body.");
+                throw new AppError(400, "Verifique os campos do body.");
             }
 
             const result = await this.favoriteService.toggle(favoriteDTO);
@@ -48,7 +48,7 @@ export class FavoriteController {
         const { type } = req.query as MediaRequestQuery
 
         if (type !== 'movie' && type !== 'tv') {
-            throw new ApiError(400, "Tipo inválido. Tente 'movie' ou 'tv'")
+            throw new AppError(400, "Tipo inválido. Tente 'movie' ou 'tv'")
         }
         return type as MediaType
     }

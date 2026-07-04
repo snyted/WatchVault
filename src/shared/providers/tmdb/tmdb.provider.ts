@@ -1,5 +1,5 @@
 import { MediaType } from "@prisma/client";
-import { ApiError } from "../../errors/api.error.js";
+import { AppError } from "../../errors/app.error.js";
 import { AppMedia } from "../../../modules/media/media.types.js";
 import { mapTMDB } from "./tmdb.mapper.js";
 import { TMDBMediaResult } from "./tmdb.types.js";
@@ -11,7 +11,7 @@ export class TMDBProvider {
             const { data } = await tmdbApi.get(`/${type}/${tmdbId.toString()}`);
             return mapTMDB(data, type);
         } catch (error: any) {
-            throw new ApiError(
+            throw new AppError(
                 error.response?.status || 500,
                 "Erro ao buscar filme ou série no TMDB"
             );
@@ -23,7 +23,7 @@ export class TMDBProvider {
             const { data } = await tmdbApi.get(`/trending/${type}/week`);
             return data.results.map((m: TMDBMediaResult) => mapTMDB(m));
         } catch (error: any) {
-            throw new ApiError(500, "Erro ao buscar trendings do Provider.");
+            throw new AppError(500, "Erro ao buscar trendings do Provider.");
         }
     }
 
@@ -34,7 +34,7 @@ export class TMDBProvider {
             });
             return data.results.map((media: TMDBMediaResult) => mapTMDB(media));
         } catch (error: any) {
-            throw new ApiError(
+            throw new AppError(
                 error.response?.status || 500,
                 "Erro ao buscar filmes por nome"
             );

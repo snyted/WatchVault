@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { ApiError } from "../../shared/errors/api.error.js";
+import { AppError } from "../../shared/errors/app.error.js";
 import { LoginDTO, LoginResponseDTO, RegisterDTO } from "./auth.dtos.js";
 import { IUserRepository } from "../user/user.types.js";
 
@@ -11,17 +11,17 @@ export class AuthService {
   public async register(data: RegisterDTO): Promise<boolean> {
 
     if (data.password !== data.confirmPassword) {
-      throw new ApiError(400, "Unmatching passwords.")
+      throw new AppError(400, "Unmatching passwords.")
     }
 
     if (data.password.length < 8 || data.password.length > 64) {
-      throw new ApiError(400, "Invalid password. Try at least 8 characters.")
+      throw new AppError(400, "Invalid password. Try at least 8 characters.")
     }
 
     const isFounded = await this.userRepository.find(data.username)
 
     if (isFounded) {
-      throw new ApiError(400, "User already exists.");
+      throw new AppError(400, "User already exists.");
     }
 
     const hash = await bcrypt.hash(data.password, 10);
@@ -32,20 +32,16 @@ export class AuthService {
   }
 
   async login(data: LoginDTO): Promise<LoginResponseDTO> {
-    if (!data.username || !data.password) {
-      throw new ApiError(400, "Usuário e senha são obrigatórios.")
-    }
-
     const dbUser = await this.userRepository.find(data.username)
 
     if (!dbUser) {
-      throw new ApiError(401, "Usuário ou senha incorretos.");
+      throw new AppError(401, "Usuário ou senha incorretos.");
     }
 
     const match = await bcrypt.compare(data.password, dbUser.password);
 
     if (!match) {
-      throw new ApiError(401, "Usuário ou senha incorretos.");
+      throw new AppError(401, "Usuário ou senha incorretos.");
     }
 
     const jwtSecret = process.env.JWT_SECRET
@@ -54,7 +50,7 @@ export class AuthService {
       throw new Error("JWT_SECRET não está definido.");
     }
 
-    const token = jwt.sign({ id: dbUser.id }, jwtSecret, {
+    const token = jwt.sign({ id: dbUser.id, username: dbUser.username }, jwtSecret, {
       expiresIn: "1h",
 
     });
