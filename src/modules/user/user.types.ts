@@ -6,7 +6,9 @@ export interface IUserRepository {
     find(username: string): Promise<User | null>
 
     // user context
-    myInfos(userId: number): Promise<AppUser>
+    userReviewCount(userId: number): Promise<any>
+    userFavoriteCount(userId: number): Promise<any>
+
 }
 
 export interface AppUser {

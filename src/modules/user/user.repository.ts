@@ -39,30 +39,27 @@ export class UserRepositoryPrisma implements IUserRepository {
     }
   }
 
-  public async myInfos(userId: number): Promise<AppUser> {
-    const favoritesQuantity = await prisma.favorite.count(
+  public async userReviewCount(userId: number): Promise<any> {
+    const reviewCount = await prisma.assessment.count(
+      {
+        where: {
+          id: userId
+        },select: {
+          review: true
+        }
+      }
+    )
+    return reviewCount
+  }
+
+  public async userFavoriteCount(userId: number): Promise<any> {
+    const reviewCount = await prisma.favorite.count(
       {
         where: {
           id: userId
         }
       }
     )
-    const assessmentQuatity = await prisma.assessment.count(
-      {
-        where: {
-          id: userId
-        }
-      }
-    )
-
-
-    const user: AppUser = {
-      userId,
-      username: 'x',
-      favoritesQuantity,
-      reviewsQuantity: assessmentQuatity,
-      ratingsQuantity: assessmentQuatity,
-    }
-    return user
+    return reviewCount
   }
 }

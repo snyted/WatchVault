@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { userController } from "./user.container.js";
 import { favoriteController } from "../favorite/favorite.container.js";
-// import { authenticate } from "../middlewares/authenticate.middleware.js";
+import { authenticate } from "../../shared/middlewares/authenticate.middleware.js";
 
 const router = Router();
-router.get("/", userController.infos);
+router.get("/", authenticate ,userController.myInfos);
 
 // router.get("/rates", favoriteController.myRatings);
 // router.get("/reviews", favoriteController.myReviews);
