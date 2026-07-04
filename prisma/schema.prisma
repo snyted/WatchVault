@@ -32,7 +32,7 @@ model Media {
   type         MediaType
   title        String    @db.VarChar(255)
   overview     String    @db.Text
-  releaseDate  DateTime? @map("release_date") @db.Date
+  releaseDate  DateTime @map("release_date") @db.Date
   posterPath   String?   @map("poster_path") @db.VarChar(255)
   backdropPath String?   @map("backdrop_path") @db.VarChar(255)
 
