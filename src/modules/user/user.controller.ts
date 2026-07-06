@@ -6,12 +6,15 @@ export class UserController {
 
     public myInfos = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { id: userId, username } = req.user;
-            const infos: any = await this.userService.myInfos(userId, username);
+            const { id, username } = req.user;
+
+            const infos: any = await this.userService.myInfos(id, username);
 
             res.status(200).json(infos);
         } catch (error) {
             next(error)
         }
     }
+
+    
 }

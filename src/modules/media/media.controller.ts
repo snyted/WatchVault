@@ -39,14 +39,16 @@ export class MediaController {
     try {
       const id = req.params.id as string
       const type: MediaType = this.getType(req)
-      const media: AppMedia = await this.mediaService.find(Number(id), type);
 
-      if (!media) throw new AppError(404, "Filme/Série não encontrados!");
+      const media: AppMedia = await this.mediaService.findOrCreate(Number(id), type);
+
       res.status(200).json(media);
     } catch (error) {
       next(error);
     }
   }
+
+  
 
   private getType = (req: Request) => {
 

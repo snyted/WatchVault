@@ -25,19 +25,42 @@ export class AssessmentController {
         }
     }
 
-    myReviews = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public myReviews = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { userId } = req.body;
-            const list = await this.assessmentService.userReviews(userId);
+            const { id } = req.user;
+            console.log(typeof id)
+            const list = await this.assessmentService.userReviews(id);
             res.status(200).json(list);
         } catch (err) {
             next(err);
         }
+    }
 
+    public upsertReview = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const { id } = req.user;
+            const dto: UpsertReviewDTO = req.body;
+
+
+            const created = this.assessmentService.upsertReview(dto, id)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public allReviews = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { media_id: id } = req.body
+
+            const reviews = await this.assessmentService.allReviews(id)
+
+            res.status(200).json(reviews)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private getType = (req: Request) => {
-
         const { type } = req.query as MediaRequestQuery
 
         if (type !== 'movie' && type !== 'tv') {

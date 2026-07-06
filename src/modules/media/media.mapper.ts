@@ -4,6 +4,7 @@ import { AppMedia } from "./media.types.js";
 export class MediaMapper {
     static toDomain(data: Media): AppMedia {
         return {
+            id: data.id,
             tmdbId: data.tmdbId,
             title: data.title,
             overview: data.overview,

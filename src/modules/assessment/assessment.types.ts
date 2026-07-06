@@ -17,11 +17,18 @@ export interface Review {
     rating: number,
 };
 
+export interface UpdateReview {
+    mediaId: number,
+    type: MediaType,
+    review: string,
+    rating: number,
+}
+
 // Requests
 export interface UpsertReviewDTO {
-    userId: number,
     mediaId: number,
-    review?: string,
+    type: MediaType,
+    review: string,
     rating: number,
 };
 

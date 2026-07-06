@@ -9,6 +9,7 @@ export interface IMediaRepository {
 
 // domain
 export interface AppMedia {
+    id: number,
     tmdbId: number,
     title: string,
     overview: string,
