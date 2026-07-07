@@ -6,7 +6,7 @@ import { TMDBProvider } from "../../shared/providers/tmdb/tmdb.provider.js";
 const tmdbProvider = new TMDBProvider()
 
 const mediaRepository = new MediaRepositoryPrisma()
-const mediaService = new MediaService(mediaRepository, tmdbProvider)
+export const mediaService = new MediaService(mediaRepository, tmdbProvider)
 
 
 export const mediaController = new MediaController(mediaService)
