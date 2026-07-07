@@ -4,7 +4,7 @@ import { UserService } from "./user.service.js"
 export class UserController {
     public constructor(private readonly userService: UserService) { }
 
-    public myInfos = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public userStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id, username } = req.user;
 
