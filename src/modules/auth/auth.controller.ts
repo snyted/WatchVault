@@ -4,7 +4,7 @@ import { AuthService } from "./auth.service.js";
 import { Request, Response, NextFunction } from 'express';
 
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  public constructor(private authService: AuthService) { }
 
   public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -22,7 +22,7 @@ export class AuthController {
     }
   };
 
-  login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const data: LoginDTO = req.body
       if (!data.username || !data.password) {

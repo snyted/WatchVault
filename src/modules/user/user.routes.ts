@@ -7,11 +7,9 @@ import { assessmentController } from "../assessment/assessment.container.js";
 import { authenticate } from "../../shared/middlewares/authenticate.middleware.js";
 
 const router = Router();
-router.get("/", authenticate, userController.myInfos);
-
-router.get("/reviews", authenticate, assessmentController.myReviews);
-
+router.get("/", authenticate, userController.userStats);
+router.get("/assessments", authenticate, assessmentController.userAssessments);
 router.get("/favorites", authenticate, favoriteController.myFavs);
-router.put("favorites/:id/toggle", authenticate, favoriteController.toggleFavorite)
+// router.get("assessments/:mediaId/", authenticate, assessmentController.userAssessment);
 
 export default router;
