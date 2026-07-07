@@ -1,5 +1,7 @@
+import { mediaService } from "../media/media.container.js";
 import { AssessmentController } from "./assessment.controller.js";
 import { AssessmentRepositoryPrisma } from "./assessment.repository.js";
 import { AssessmentService } from "./assessment.service.js";
 
-export const assessmentController = new AssessmentController(new AssessmentService(new AssessmentRepositoryPrisma));
+const assessmentService = new AssessmentService(new AssessmentRepositoryPrisma, mediaService)
+export const assessmentController = new AssessmentController(assessmentService);

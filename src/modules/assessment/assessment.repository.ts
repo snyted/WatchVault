@@ -1,11 +1,18 @@
+import { MediaType } from "@prisma/client";
 import prisma from "../../shared/config/prisma.js";
-import { IAssesmentRepository, Review } from "./assessment.types.js";
+import { IAssesmentRepository, Assessment } from "./assessment.types.js";
 
 export class AssessmentRepositoryPrisma implements IAssesmentRepository {
-    public async insert(data: Review): Promise<void> {
+    public async insert(data): Promise<void> {
+        console.log(data)
         try {
             await prisma.assessment.create({
-                data
+                data: {
+                    userId: data.userId,
+                    mediaId: data.mediaId,
+                    review: data.review,
+                    rating: data.rating,
+                }
             })
         }
         catch (error: unknown) {
@@ -38,28 +45,6 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
         }
     }
 
-    public async findById(userId: number, mediaId: number): Promise<boolean> {
-        try {
-            const itFound = await prisma.assessment.findUnique({
-                where: {
-                    userId_mediaId: {
-                        userId,
-                        mediaId,
-                    }
-                }
-            })
-
-            if (!itFound) {
-                return false;
-            }
-            return true;
-        } catch (error) {
-            console.error(error)
-            throw error
-        }
-
-    }
-
     public async delete(userId: number, mediaId: number): Promise<void> {
         try {
             await prisma.assessment.delete({
@@ -77,7 +62,29 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
 
     }
 
-    public async userReviews(userId: number): Promise<Review[]> {
+    public async findById(userId: number, mediaId: number): Promise<any> {
+        try {
+            const assessment = await prisma.assessment.findUnique({
+                where: {
+                    userId_mediaId: {
+                        userId,
+                        mediaId,
+                    }
+                }
+            })
+
+            if (!assessment) {
+                return null;
+            }
+            return assessment;
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+
+    }
+
+    public async userAssessments(userId: number): Promise<Assessment[]> {
         try {
             const list = prisma.assessment.findMany({
                 where: {
@@ -98,15 +105,17 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
 
     };
 
-    public async mediaReviews(mediaId: number): Promise<Review[]> {
+    public async mediaAssessments(mediaId: number, type: MediaType): Promise<Assessment[]> {
         try {
             const list = prisma.assessment.findMany({
                 where: {
                     mediaId,
+                    type
                 },
                 select: {
                     userId: true,
                     mediaId: true,
+                    type: true,
                     review: true,
                     rating: true,
                 }

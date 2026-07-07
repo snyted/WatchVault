@@ -1,36 +1,40 @@
 import { MediaType } from "@prisma/client";
 
 export interface IAssesmentRepository {
-    insert(data: Review): Promise<void>,
-    update(userId: number, mediaId: number, newReview: string): Promise<Review>,
-    findById(userId: number, mediaId: number): Promise<boolean>
+    insert(data: Assessment): Promise<void>,
+    update(userId: number, mediaId: number, newAssessment: string): Promise<Assessment>,
     delete(userId: number, mediaId: number): Promise<void>,
-    userReviews(userId: number): Promise<Review[]>,
-    mediaReviews(mediaId: number): Promise<Review[]>,
+    findById(userId: number, mediaId: number): Promise<any>
+    userAssessments(userId: number): Promise<Assessment[]>,
+    mediaAssessments(mediaId: number, type: MediaType): Promise<Assessment[]>,
 };
 
 // Domain
-export interface Review {
+export interface Assessment {
     userId: number,
     mediaId: number,
-    review?: string | null,
+    type: MediaType,
+    review: string | null,
     rating: number,
 };
 
-export interface UpdateReview {
-    mediaId: number,
-    type: MediaType,
-    review: string,
-    rating: number,
-}
 
 // Requests
-export interface UpsertReviewDTO {
+export type CreateAssessmentRequest = Assessment;
+export interface UpdateAssessmentRequest {
+    userId: number,
     mediaId: number,
     type: MediaType,
-    review: string,
-    rating: number,
+    newReview: string,
+    newRating: number,
+}
+export interface DeleteAssessmentRequest {
+    userId: number,
+    mediaId: number,
+    type: MediaType,
 };
 
+// Requests
+
+
 // Response
-export type ReviewResponse = Review;
