@@ -1,28 +1,23 @@
-import { MediaType } from "@prisma/client";
+import { Assessment as AssessmentModel, MediaType, Prisma, } from "@prisma/client";
 import prisma from "../../shared/config/prisma.js";
-import { IAssesmentRepository, Assessment } from "./assessment.types.js";
+import { Assessment, IAssessmentRepository } from "./assessment.types.js";
 
-export class AssessmentRepositoryPrisma implements IAssesmentRepository {
-    public async insert(data): Promise<void> {
+export class AssessmentRepositoryPrisma implements IAssessmentRepository {
+    public async insert(data: Assessment): Promise<void> {
         console.log(data)
         try {
             await prisma.assessment.create({
-                data: {
-                    userId: data.userId,
-                    mediaId: data.mediaId,
-                    review: data.review,
-                    rating: data.rating,
-                }
+                data
             })
         }
-        catch (error: unknown) {
+        catch (error) {
             console.error(error);
-            throw error
+            throw error;
         }
     }
-    public async update(userId: number, mediaId: number, newReview: string): Promise<Review> {
+    public async update(userId: number, mediaId: number, review: string): Promise<void> {
         try {
-            const updated = await prisma.assessment.update({
+            await prisma.assessment.update({
                 where: {
                     userId_mediaId: {
                         userId,
@@ -30,15 +25,9 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
                     },
                 },
                 data: {
-                    review: newReview,
-                }, select: {
-                    userId: true,
-                    mediaId: true,
-                    review: true,
-                    rating: true,
+                    review
                 }
             })
-            return updated;
         } catch (error) {
             console.error(error)
             throw error
@@ -62,7 +51,7 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
 
     }
 
-    public async findById(userId: number, mediaId: number): Promise<any> {
+    public async findById(userId: number, mediaId: number): Promise<AssessmentModel | null> {
         try {
             const assessment = await prisma.assessment.findUnique({
                 where: {
@@ -76,6 +65,7 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
             if (!assessment) {
                 return null;
             }
+
             return assessment;
         } catch (error) {
             console.error(error)
@@ -84,7 +74,7 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
 
     }
 
-    public async userAssessments(userId: number): Promise<Assessment[]> {
+    public async userAssessments(userId: number): Promise<any[]> {
         try {
             const list = prisma.assessment.findMany({
                 where: {
@@ -92,6 +82,11 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
                 },
                 select: {
                     userId: true,
+                    user: {
+                        select: {
+                            username: true
+                        }
+                    },
                     mediaId: true,
                     review: true,
                     rating: true,
@@ -105,22 +100,19 @@ export class AssessmentRepositoryPrisma implements IAssesmentRepository {
 
     };
 
-    public async mediaAssessments(mediaId: number, type: MediaType): Promise<Assessment[]> {
+    public async mediaAssessments(mediaId: number, type: MediaType): Promise<any[]> {
         try {
-            const list = prisma.assessment.findMany({
+            const list = prisma.media.findUnique({
                 where: {
-                    mediaId,
-                    type
-                },
-                select: {
-                    userId: true,
-                    mediaId: true,
-                    type: true,
-                    review: true,
-                    rating: true,
+                    tmdbId_type: {
+                        tmdbId: mediaId,
+                        type
+                    }
+                }, select: {
+                    assessments: true
                 }
             });
-            return list
+            return list;
         } catch (error) {
             console.error(error);
             throw error;

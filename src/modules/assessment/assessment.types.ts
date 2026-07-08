@@ -1,12 +1,12 @@
-import { MediaType } from "@prisma/client";
+import { MediaType, Assessment as AssessmentModel } from "@prisma/client";
 
-export interface IAssesmentRepository {
+export interface IAssessmentRepository {
     insert(data: Assessment): Promise<void>,
-    update(userId: number, mediaId: number, newAssessment: string): Promise<Assessment>,
+    update(userId: number, mediaId: number, newAssessment: string): Promise<void>,
     delete(userId: number, mediaId: number): Promise<void>,
-    findById(userId: number, mediaId: number): Promise<any>
-    userAssessments(userId: number): Promise<Assessment[]>,
-    mediaAssessments(mediaId: number, type: MediaType): Promise<Assessment[]>,
+    findById(userId: number, mediaId: number): Promise<AssessmentModel | null>
+    userAssessments(userId: number): Promise<any[]>,
+    mediaAssessments(mediaId: number, type: MediaType): Promise<any[]>,
 };
 
 // Domain
@@ -20,13 +20,19 @@ export interface Assessment {
 
 
 // Requests
-export type CreateAssessmentRequest = Assessment;
+export interface CreateAssessmentRequest {
+    userId: number,
+    mediaId: number,
+    type: MediaType,
+    review: string | null,
+    rating: number,
+}
 export interface UpdateAssessmentRequest {
     userId: number,
     mediaId: number,
     type: MediaType,
-    newReview: string,
-    newRating: number,
+    review: string,
+    rating: number,
 }
 export interface DeleteAssessmentRequest {
     userId: number,
@@ -34,7 +40,3 @@ export interface DeleteAssessmentRequest {
     type: MediaType,
 };
 
-// Requests
-
-
-// Response

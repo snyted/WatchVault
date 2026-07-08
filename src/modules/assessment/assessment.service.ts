@@ -3,10 +3,10 @@ import { MediaService } from "../media/media.service.js";
 
 import { AppError } from "../../shared/errors/app.error.js";
 
-import { CreateAssessmentRequest, DeleteAssessmentRequest, IAssesmentRepository, UpdateAssessmentRequest } from "./assessment.types.js";
+import { CreateAssessmentRequest, DeleteAssessmentRequest, IAssessmentRepository, UpdateAssessmentRequest } from "./assessment.types.js";
 
 export class AssessmentService {
-  public constructor(private readonly assessmentRepository: IAssesmentRepository, private readonly mediaService: MediaService) { }
+  public constructor(private readonly assessmentRepository: IAssessmentRepository, private readonly mediaService: MediaService) { }
 
   public async create(data: CreateAssessmentRequest): Promise<void> {
     const media = await this.mediaService.findOrCreate(data.mediaId, data.type);
@@ -28,7 +28,7 @@ export class AssessmentService {
       throw new AppError(404, "A avaliação não existe, impossível reavaliar.")
     }
 
-    await this.assessmentRepository.update(data.userId, media.id, data.newReview);
+    await this.assessmentRepository.update(data.userId, media.id, data.review);
   }
 
   public async delete(data: DeleteAssessmentRequest): Promise<void> {
@@ -48,6 +48,7 @@ export class AssessmentService {
   }
 
   public async mediaAssessments(mediaId: number, type: MediaType): Promise<any[]> {
-    return await this.assessmentRepository.mediaAssessments(mediaId, type);
+    const media = await this.mediaService.findOrCreate(mediaId, type);
+    return await this.assessmentRepository.mediaAssessments(media.id, type);
   }
 }
