@@ -43,8 +43,9 @@ CREATE TABLE "favorites" (
 CREATE TABLE "assessments" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
+    "username" TEXT NOT NULL,
     "media_id" INTEGER NOT NULL,
-    "rate" INTEGER NOT NULL,
+    "rating" INTEGER NOT NULL,
     "review" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
