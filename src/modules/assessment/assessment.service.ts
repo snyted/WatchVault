@@ -3,7 +3,7 @@ import { MediaService } from "../media/media.service.js";
 
 import { AppError } from "../../shared/errors/app.error.js";
 
-import { CreateAssessmentRequest, DeleteAssessmentRequest, IAssessmentRepository, UpdateAssessmentRequest } from "./assessment.types.js";
+import { CreateAssessmentRequest, DeleteAssessmentRequest, IAssessmentRepository, UpdateAssessmentRequest, UserAssessmentsResponse } from "./assessment.types.js";
 
 export class AssessmentService {
   public constructor(private readonly assessmentRepository: IAssessmentRepository, private readonly mediaService: MediaService) { }
@@ -43,8 +43,17 @@ export class AssessmentService {
   }
 
 
-  public async userAssessments(userId: number): Promise<any> {
-    return await this.assessmentRepository.userAssessments(userId);
+  public async userAssessments(userId: number): Promise<UserAssessmentsResponse[]> {
+    const data = await this.assessmentRepository.userAssessments(userId);
+    console.log(data)
+    return data.map((d) => {
+      return {
+        title: d.media.title,
+        type: d.media.type,
+        review: d.review,
+        rating: d.rating
+      }
+    })
   }
 
   public async mediaAssessments(mediaId: number, type: MediaType): Promise<any[]> {

@@ -40,3 +40,10 @@ export interface DeleteAssessmentRequest {
     type: MediaType,
 };
 
+export interface UserAssessmentsResponse {
+    title: string,
+    type: string,
+    review: string,
+    rating: string,
+}
+

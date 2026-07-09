@@ -12,13 +12,13 @@ export class AssessmentController {
             const createAssessment: CreateAssessmentRequest = {
                 userId: req.user.id,
                 mediaId: Number(req.params.id),
-                type: req.params.type as MediaType,
+                type: this.getType(req),
                 review: req.body.review || null,
                 rating: req.body.rating,
             }
 
-            await this.assessmentService.create(createAssessment);
-            res.json({ status_code: 201, message: "Avaliação adicionada com sucesso.", created_at: new Date().toLocaleDateString("pt-br") });
+            const result = await this.assessmentService.create(createAssessment);
+            res.json({ message: "Avaliação adicionada com sucesso.", data: result });
         } catch (error) {
             next(error);
         }
@@ -29,14 +29,14 @@ export class AssessmentController {
             const updateAssessment: UpdateAssessmentRequest = {
                 userId: req.user.id,
                 mediaId: Number(req.params.id),
-                type: req.params.type as MediaType,
+                type: this.getType(req),
                 review: req.body.review,
                 rating: req.body.rating,
             }
 
-            await this.assessmentService.update(updateAssessment);
+            const result = await this.assessmentService.update(updateAssessment);
 
-            res.json({ status_code: 201, message: "Avaliação adicionada com sucesso.", updated_at: new Date().toLocaleDateString("pt-br") });
+            res.json({ message: "Avaliação adicionada com sucesso.", data: result });
         } catch (error) {
             next(error);
         }
@@ -47,11 +47,11 @@ export class AssessmentController {
             const deleteAssessment: DeleteAssessmentRequest = {
                 userId: req.user.id,
                 mediaId: Number(req.params.id),
-                type: req.params.type as MediaType,
+                type: this.getType(req),
             }
 
             await this.assessmentService.delete(deleteAssessment);
-            res.json({ status_code: 200, message: "Avaliação deletada com sucesso.", });
+            res.json({ message: "Avaliação deletada com sucesso.", });
         } catch (error) {
             next(error);
         }
@@ -60,9 +60,9 @@ export class AssessmentController {
 
     public userAssessments = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { id } = req.user;
-            const list = await this.assessmentService.userAssessments(id);
-            res.status(200).json({ status_code: 200, data: list });
+            const { id, username } = req.user;
+            const result = await this.assessmentService.userAssessments(id);
+            res.status(200).json({ message: "Avaliaçoes do usuário", data: { username, result } });
         } catch (error) {
             next(error);
         }
@@ -75,7 +75,7 @@ export class AssessmentController {
 
             const assessments = await this.assessmentService.mediaAssessments(Number(id), type);
 
-            res.status(200).json({ status_code: 200, data: assessments });
+            res.status(200).json({ data: assessments });
         } catch (error) {
             next(error);
         }
