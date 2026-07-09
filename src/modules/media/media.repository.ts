@@ -7,8 +7,17 @@ import { MediaMapper } from "./media.mapper.js";
 export class MediaRepositoryPrisma implements IMediaRepository {
     public async insert(data: AppMedia): Promise<AppMedia> {
         const prismaInput = MediaMapper.toPrisma(data)
+        console.log(prismaInput)
         const created = await prisma.media.create({
-            data: prismaInput
+            data: {
+                tmdbId: data.tmdbId,
+                title: data.title,
+                overview: data.overview,
+                type: data.type,
+                releaseDate: data.releaseDate,
+                posterPath: data.posterPath,
+                backdropPath: data.backdropPath,
+            }
         })
         return MediaMapper.toDomain(created)
     }
@@ -32,7 +41,7 @@ export class MediaRepositoryPrisma implements IMediaRepository {
     public async searchByName(name: string): Promise<AppMedia[] | null> {
         const results: AppMedia[] = []
 
-        if(!results){ 
+        if (!results) {
             return null
         }
         return results
