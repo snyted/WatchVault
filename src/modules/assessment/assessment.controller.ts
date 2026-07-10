@@ -62,7 +62,7 @@ export class AssessmentController {
         try {
             const { id, username } = req.user;
             const result = await this.assessmentService.userAssessments(id);
-            res.status(200).json({ message: "Avaliaçoes do usuário", data: { username, result } });
+            res.status(200).json({ data: { username, result } });
         } catch (error) {
             next(error);
         }

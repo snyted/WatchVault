@@ -4,24 +4,29 @@ import { MediaService } from "../media/media.service.js";
 import { AppError } from "../../shared/errors/app.error.js";
 
 import { CreateAssessmentRequest, DeleteAssessmentRequest, IAssessmentRepository, UpdateAssessmentRequest, UserAssessmentsResponse } from "./assessment.types.js";
+import { AssessmentMapper } from "./assessment.mapper.js";
 
 export class AssessmentService {
   public constructor(private readonly assessmentRepository: IAssessmentRepository, private readonly mediaService: MediaService) { }
 
   public async create(data: CreateAssessmentRequest): Promise<void> {
     const media = await this.mediaService.findOrCreate(data.mediaId, data.type);
-    console.log(media.id, media.title)
-    const itFound = await this.assessmentRepository.findById(data.userId, media.id);
-    console.log(itFound)
-    if (itFound) {
+    const hasAssessment = await this.assessmentRepository.findById(data.userId, media.id);
+    if (hasAssessment) {
       throw new AppError(409, "Avaliação já existe.");
     }
 
-    await this.assessmentRepository.insert({ ...data, mediaId: media.id });
+    const repositoryInput = AssessmentMapper.toPrisma(data, media.id);
+    await this.assessmentRepository.insert(repositoryInput);
   }
 
   public async update(data: UpdateAssessmentRequest): Promise<void> {
     const media = await this.mediaService.findOrCreate(data.mediaId, data.type);
+
+    if(!media.id) {
+      throw new AppError(400,'f')
+    }
+
     const itFound = await this.assessmentRepository.findById(data.userId, media.id);
 
     if (!itFound) {
@@ -40,21 +45,26 @@ export class AssessmentService {
     }
 
     await this.assessmentRepository.delete(data.userId, data.mediaId);
-  }
+  };
 
 
   public async userAssessments(userId: number): Promise<UserAssessmentsResponse[]> {
     const data = await this.assessmentRepository.userAssessments(userId);
-    console.log(data)
+
+    if (!data) {
+      throw new AppError(404, "Nenhuma review foi feita ainda.");
+    };
+
     return data.map((d) => {
       return {
+        mediaId: d.mediaId,
         title: d.media.title,
         type: d.media.type,
         review: d.review,
-        rating: d.rating
-      }
-    })
-  }
+        rating: d.rating,
+      };
+    });
+  };
 
   public async mediaAssessments(mediaId: number, type: MediaType): Promise<any[]> {
     const media = await this.mediaService.findOrCreate(mediaId, type);

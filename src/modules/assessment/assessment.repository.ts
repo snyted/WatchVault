@@ -1,10 +1,9 @@
-import { Assessment as AssessmentModel, MediaType, Prisma, } from "@prisma/client";
+import { Assessment as AssessmentModel, MediaType } from "@prisma/client";
 import prisma from "../../shared/config/prisma.js";
-import { Assessment, IAssessmentRepository } from "./assessment.types.js";
+import { IAssessmentRepository, MediaAssessmentsModel, UserAssessmentsModel, UserAssessmentsModelInput } from "./assessment.types.js";
 
 export class AssessmentRepositoryPrisma implements IAssessmentRepository {
-    public async insert(data: Assessment): Promise<void> {
-        console.log(data);
+    public async insert(data: UserAssessmentsModelInput): Promise<void> {
         await prisma.assessment.create({
             data
         });
@@ -52,17 +51,12 @@ export class AssessmentRepositoryPrisma implements IAssessmentRepository {
         return assessment;
     }
 
-    public async userAssessments(userId: number): Promise<any[]> {
+    public async userAssessments(userId: number): Promise<UserAssessmentsModel[]> {
         return prisma.assessment.findMany({
             where: {
                 userId,
             },
             select: {
-                user: {
-                    select: {
-                        username: true
-                    }
-                },
                 mediaId: true,
                 media: {
                     select: {
@@ -77,16 +71,24 @@ export class AssessmentRepositoryPrisma implements IAssessmentRepository {
     }
 
     public async mediaAssessments(mediaId: number, type: MediaType): Promise<any> {
-        return prisma.media.findUnique({
+        return prisma.assessment.findMany({
             where: {
-                tmdbId_type: {
-                    tmdbId: mediaId,
-                    type
-                }
-            },
-            select: {
-                assessments: true
+                mediaId
+            }, select: {
+                id: true,
+                user: {
+                    select: {
+                        username: true
+                    }
+                },
+                media: {
+                    select: {
+                        title: true,
+                    },
+                },
+                review: true,
+                rating: true,
             }
-        });
+        })
     }
-}
+}   
