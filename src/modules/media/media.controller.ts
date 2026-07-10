@@ -29,6 +29,7 @@ export class MediaController {
         return;
       }
       const medias = await this.mediaService.search(q);
+      console.log(medias.length)
       res.status(200).json(medias);
     } catch (error) {
       next(error);

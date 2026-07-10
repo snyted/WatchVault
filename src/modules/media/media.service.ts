@@ -1,18 +1,24 @@
 
 import { AppError } from "../../shared/errors/app.error.js";
 import { TMDBProvider } from "../../shared/providers/tmdb/tmdb.provider.js";
-import { AppMedia, AppMediaType, IMediaRepository } from "./media.types.js";
+import { MediaMapper } from "./media.mapper.js";
+import { AppMedia, AppMediaType, IMediaRepository, MediaProviderResponse } from "./media.types.js";
 
 
 export class MediaService {
     public constructor(private readonly mediaRepository: IMediaRepository, private readonly mediaProvider: TMDBProvider) { }
 
-    public trending(type: AppMediaType): Promise<AppMedia[]> {
+    public trending(type: AppMediaType): Promise<MediaProviderResponse[]> {
         return this.mediaProvider.getTrending(type)
     }
 
     public async search(query: string): Promise<any> {
-        return await this.mediaProvider.search(query)
+        const data = await this.mediaProvider.search(query);
+        if(data.length === 0 ) {
+            throw new AppError(404, "Nenhum filme ou série foi encontrado com esse nome.")
+        }
+
+        return data
     }
 
     public async findOrCreate(id: number, type: AppMediaType): Promise<AppMedia> {
@@ -20,9 +26,8 @@ export class MediaService {
         if (domainMedia) return domainMedia;
 
         const dataProvider = await this.mediaProvider.getMediaById(id, type);
-
         if (!dataProvider) throw new AppError(404, "Filme/Série não encontrado!");
 
-        return await this.mediaRepository.insert(dataProvider);
+        return await this.mediaRepository.insert(MediaMapper.toPrisma(dataProvider));
     }
 }

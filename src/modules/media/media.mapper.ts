@@ -1,27 +1,27 @@
-import { Media, Prisma } from "@prisma/client";
-import { AppMedia } from "./media.types.js";
+import { Media as MediaModel, Prisma } from "@prisma/client";
+import { AppMedia, MediaProviderResponse } from "./media.types.js";
 
 export class MediaMapper {
-    static toDomain(data: Media): AppMedia {
+    static toDomain(data: MediaModel): AppMedia {
         return {
             id: data.id,
             tmdbId: data.tmdbId,
             title: data.title,
             overview: data.overview,
             type: data.type,
-            releaseDate: (data.releaseDate?.toLocaleDateString("pt-br")),
+            releaseDate: (data.releaseDate?.toLocaleDateString("pt-br")) || null,
             posterPath: data.posterPath || null,
             backdropPath: data.backdropPath || null,
         }
     }
 
-    static toPrisma(data: AppMedia): Prisma.MediaCreateInput {
+    static toPrisma(data: MediaProviderResponse): Prisma.MediaCreateInput {
         return {
             tmdbId: data.tmdbId,
             title: data.title,
             overview: data.overview,
             type: data.type,
-            releaseDate: new Date(data.releaseDate),
+            releaseDate: data.releaseDate ? new Date(data.releaseDate) : null,
             posterPath: data.posterPath,
             backdropPath: data.backdropPath
         }

@@ -1,13 +1,11 @@
-import { MediaType } from "@prisma/client";
+import { MediaType, Prisma } from "@prisma/client";
 import prisma from "../../shared/config/prisma.js";
 import { AppMedia, IMediaRepository } from "./media.types.js";
 import { MediaMapper } from "./media.mapper.js";
 
 
 export class MediaRepositoryPrisma implements IMediaRepository {
-    public async insert(data: AppMedia): Promise<AppMedia> {
-        const prismaInput = MediaMapper.toPrisma(data)
-        console.log(prismaInput)
+    public async insert(data: Prisma.MediaCreateInput): Promise<AppMedia> {
         const created = await prisma.media.create({
             data: {
                 tmdbId: data.tmdbId,

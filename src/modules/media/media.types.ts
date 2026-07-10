@@ -1,8 +1,8 @@
-import { Media, MediaType } from "@prisma/client";
+import { Media, MediaType, Prisma } from "@prisma/client";
 
 // interface
 export interface IMediaRepository {
-    insert(data: AppMedia): Promise<AppMedia>,
+    insert(data: Prisma.MediaCreateInput): Promise<AppMedia>,
     findById(tmdbId: number, type: MediaType): Promise<AppMedia | null>,
     searchByName(name: string): Promise<AppMedia[] | null>,
 }
@@ -13,14 +13,13 @@ export interface AppMedia {
     tmdbId: number,
     title: string,
     overview: string,
-    releaseDate: string,
+    releaseDate: string | null,
     posterPath: string | null,
     backdropPath: string | null,
     type: MediaType,
+    length?: number,
 }
 export type AppMediaType = MediaType
-
-
 
 // dtos
 export interface UserMediaResponseDTO extends Omit<Media, "id" | "createAt" | "updatedAt"> {
@@ -31,4 +30,15 @@ export interface UserMediaResponseDTO extends Omit<Media, "id" | "createAt" | "u
 export interface MediaRequestQuery {
     type?: string;
     page?: string;
+}
+
+export interface MediaProviderResponse {
+    tmdbId: number,
+    title: string,
+    overview: string,
+    releaseDate: string | null,
+    posterPath: string | null,
+    backdropPath: string | null,
+    type: MediaType,
+    length?: number,
 }
