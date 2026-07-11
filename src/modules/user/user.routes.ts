@@ -9,7 +9,6 @@ import { authenticate } from "../../shared/middlewares/authenticate.middleware.j
 const router = Router();
 router.get("/", authenticate, userController.userStats);
 router.get("/assessments", authenticate, assessmentController.userAssessments);
-router.get("/favorites", authenticate, favoriteController.myFavs);
-// router.get("assessments/:mediaId/", authenticate, assessmentController.userAssessment);
+router.get("/favorites", authenticate, favoriteController.userFavorites);
 
 export default router;
