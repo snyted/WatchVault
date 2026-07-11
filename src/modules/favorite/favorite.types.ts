@@ -7,7 +7,7 @@ export interface IFavoriteRepository {
     insert(userId: number, mediaId: number): Promise<void>,
     find(userId: number, mediaId: number): Promise<AppFavorite | null>,
     delete(userId: number, mediaId: number): Promise<void>,
-    userList(userId: number): Promise<AppFavorite[] | null>,
+    userList(userId: number): Promise<AppFavorite[]>,
 };
 
 export interface AppFavorite {

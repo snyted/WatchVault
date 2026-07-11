@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { FavoriteService } from "./favore.service.js";
+import { FavoriteService } from "./favorite.service.js";
 import { ToggleFavoriteDTO } from "./favorite.types.js";
 import { MediaRequestQuery } from "../media/media.types.js";
 import { AppError } from "../../shared/errors/app.error.js";
@@ -8,40 +8,59 @@ import { MediaType } from "@prisma/client";
 export class FavoriteController {
     public constructor(private readonly favoriteService: FavoriteService) { }
 
-    // user actions
-    public myFavs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    public userFavorites = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { id } = req.body;
-            const favs = await this.favoriteService.myFavs(id);
+            const { id } = req.user;
+
+            const favs = await this.favoriteService.userFavorites(id);
+
             res.status(200).json({
-                msg: "Aqui está sua lista",
-                favs
+                data: {
+                    favs
+                }
             });
-        } catch (err) {
-            next(err);
+        } catch (error) {
+            next(error);
         }
     }
-    public toggleFavorite = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+    public add = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const favoriteDTO: ToggleFavoriteDTO = {
-                userId: Number(req.body.id as string),
-                mediaId: Number(req.params.id as string),
+                userId: req.user.id,
+                mediaId: Number(req.params.id),
                 mediaType: this.getType(req),
             }
 
             if (!favoriteDTO.mediaId || !favoriteDTO.mediaType) {
-                throw new AppError(400, "Verifique os campos do body.");
+                throw new AppError(400, "Verifique os campos do param.");
             }
 
-            const result = await this.favoriteService.toggle(favoriteDTO);
-            res.status(201).json({ result });
-        } catch (err) {
-            next(err);
+            const result = await this.favoriteService.add(favoriteDTO);
+            res.status(201).json({ data: { result } });
+        } catch (error) {
+            next(error);
         }
     }
 
+    public remove = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const favoriteDTO: ToggleFavoriteDTO = {
+                userId: req.user.id,
+                mediaId: Number(req.params.id),
+                mediaType: this.getType(req),
+            }
 
+            if (!favoriteDTO.mediaId || !favoriteDTO.mediaType) {
+                throw new AppError(400, "Verifique os campos do param.");
+            }
 
+            const result = await this.favoriteService.remove(favoriteDTO);
+            res.status(200).json({ data: { result } });
+        } catch (error) {
+            next(error);
+        }
+    }
 
     private getType = (req: Request) => {
 
