@@ -31,17 +31,10 @@ export class MediaRepositoryPrisma implements IMediaRepository {
         }
         );
 
-        if (!found) return null
-
-        return MediaMapper.toDomain(found)
-    }
-
-    public async searchByName(name: string): Promise<AppMedia[] | null> {
-        const results: AppMedia[] = []
-
-        if (!results) {
+        if (!found) {
             return null
         }
-        return results
+
+        return MediaMapper.toDomain(found);
     }
 }

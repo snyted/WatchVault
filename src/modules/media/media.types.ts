@@ -4,7 +4,6 @@ import { Media, MediaType, Prisma } from "@prisma/client";
 export interface IMediaRepository {
     insert(data: Prisma.MediaCreateInput): Promise<AppMedia>,
     findById(tmdbId: number, type: MediaType): Promise<AppMedia | null>,
-    searchByName(name: string): Promise<AppMedia[] | null>,
 }
 
 // domain
@@ -17,7 +16,6 @@ export interface AppMedia {
     posterPath: string | null,
     backdropPath: string | null,
     type: MediaType,
-    length?: number,
 }
 export type AppMediaType = MediaType
 

@@ -12,13 +12,13 @@ export class MediaService {
         return this.mediaProvider.getTrending(type)
     }
 
-    public async search(query: string): Promise<any> {
+    public async search(query: string): Promise<MediaProviderResponse> {
         const data = await this.mediaProvider.search(query);
-        if(data.length === 0 ) {
+        if (data.length === 0) {
             throw new AppError(404, "Nenhum filme ou série foi encontrado com esse nome.")
         }
 
-        return data
+        return data;
     }
 
     public async findOrCreate(id: number, type: AppMediaType): Promise<AppMedia> {

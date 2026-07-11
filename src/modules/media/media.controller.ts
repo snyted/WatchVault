@@ -38,10 +38,10 @@ export class MediaController {
 
   public findById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const id = req.params.id as string
+      const id = Number(req.params.id)
       const type: MediaType = this.getType(req)
 
-      const media: AppMedia = await this.mediaService.findOrCreate(Number(id), type);
+      const media: AppMedia = await this.mediaService.findOrCreate(id, type);
 
       res.status(200).json(media);
     } catch (error) {
