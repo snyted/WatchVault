@@ -1,7 +1,8 @@
-import { CreateAssessmentRequest, UserAssessmentsModelInput } from "./assessment.types.js";
+import { CreateAssessmentRequest } from "./assessment.dtos.js";
+import { UserAssessmentsModelInput } from "./assessment.types.js";
 
 // assessment.mapper.ts
-export class AssessmentMapper {
+export class UserAssessmentMapper {
     public static toPrisma(request: CreateAssessmentRequest, internalMediaId: number): UserAssessmentsModelInput {
         return {
             userId: request.userId,
@@ -11,3 +12,13 @@ export class AssessmentMapper {
         };
     }
 }
+
+// export class MediaAssessmentMapper {
+//     public static toResponse(datafromPrisma) {
+//         return {
+//             user: datafromPrisma.user.username,
+//             review: datafromPrisma.review,
+//             rating: datafromPrisma.rating
+//         }
+//     }
+// }

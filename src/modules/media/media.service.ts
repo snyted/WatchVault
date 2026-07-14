@@ -28,6 +28,6 @@ export class MediaService {
         const dataProvider = await this.mediaProvider.getMediaById(id, type);
         if (!dataProvider) throw new AppError(404, "Filme/Série não encontrado!");
 
-        return await this.mediaRepository.insert(MediaMapper.toPrisma(dataProvider));
+        return await this.mediaRepository.insert(dataProvider);
     }
 }

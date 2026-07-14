@@ -1,5 +1,5 @@
 import { MediaType } from "@prisma/client";
-import { AppMedia, MediaProviderResponse } from "../../../modules/media/media.types.js";
+import { MediaProviderResponse } from "../../../modules/media/media.types.js";
 import { TMDBMediaResult } from "./tmdb.types.js";
 
 

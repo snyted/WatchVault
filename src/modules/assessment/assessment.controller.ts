@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { AssessmentService } from "./assessment.service.js";
-import { CreateAssessmentRequest, DeleteAssessmentRequest, UpdateAssessmentRequest } from "./assessment.types.js";
-import { MediaRequestQuery } from "../media/media.types.js";
+import { CreateAssessmentRequest, DeleteAssessmentRequest, UpdateAssessmentRequest } from "./assessment.dtos.js";
+import { AppMediaType, MediaRequestQuery } from "../media/media.types.js";
 import { AppError } from "../../shared/errors/app.error.js";
-import { MediaType } from "@prisma/client";
 export class AssessmentController {
     public constructor(private readonly assessmentService: AssessmentService) { };
 
@@ -75,7 +74,15 @@ export class AssessmentController {
 
             const assessments = await this.assessmentService.mediaAssessments(Number(id), type);
 
-            res.status(200).json({ data: assessments });
+            const assessmentMapped = assessments.map((assessment => {
+                return {
+                    id: assessment.id,
+                    user: assessment.user.username,
+                    review: assessment.review, rating: assessment.rating
+                }
+            }))
+
+            res.status(200).json({ data: assessmentMapped });
         } catch (error) {
             next(error);
         }
@@ -88,6 +95,6 @@ export class AssessmentController {
         if (type !== 'movie' && type !== 'tv') {
             throw new AppError(400, "Tipo inválido. Tente 'movie' ou 'tv'")
         }
-        return type as MediaType
+        return type as AppMediaType
     }
 }

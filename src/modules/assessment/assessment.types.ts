@@ -6,7 +6,7 @@ export interface IAssessmentRepository {
     delete(userId: number, mediaId: number): Promise<void>,
     findById(userId: number, mediaId: number): Promise<AssessmentModel | null>
     userAssessments(userId: number): Promise<UserAssessmentsModel[]>,
-    mediaAssessments(mediaId: number, type: MediaType): Promise<any>,
+    mediaAssessments(mediaId: number): Promise<MediaAssessmentsModelOutput[]>,
 };
 
 // Domain
@@ -18,36 +18,8 @@ export interface Assessment {
     rating: number,
 };
 
-// Requests
-export interface CreateAssessmentRequest {
-    userId: number,
-    mediaId: number,
-    type: MediaType,
-    review: string | null,
-    rating: number,
-}
-export interface UpdateAssessmentRequest {
-    userId: number,
-    mediaId: number,
-    type: MediaType,
-    review: string,
-    rating: number,
-}
-export interface DeleteAssessmentRequest {
-    userId: number,
-    mediaId: number,
-    type: MediaType,
-};
 
-export interface UserAssessmentsResponse {
-    mediaId: number,
-    title: string,
-    type: MediaType,
-    review: string | null,
-    rating: number,
-}
-
-// Repository 
+// --- REPOSITORY --- 
 export interface UserAssessmentsModelInput {
     userId: number,
     mediaId: number,
@@ -71,4 +43,13 @@ export interface MediaAssessmentsModel {
         review: string | null,
         rating: number,
     }
+}
+
+export interface MediaAssessmentsModelOutput {
+    id: number,
+    user: {
+        username: string,
+    }
+    review: string | null,
+    rating: number
 }

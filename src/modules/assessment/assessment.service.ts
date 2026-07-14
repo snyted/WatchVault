@@ -3,8 +3,9 @@ import { MediaService } from "../media/media.service.js";
 
 import { AppError } from "../../shared/errors/app.error.js";
 
-import { CreateAssessmentRequest, DeleteAssessmentRequest, IAssessmentRepository, UpdateAssessmentRequest, UserAssessmentsResponse } from "./assessment.types.js";
-import { AssessmentMapper } from "./assessment.mapper.js";
+import { IAssessmentRepository, MediaAssessmentsModelOutput } from "./assessment.types.js";
+import { UserAssessmentMapper } from "./assessment.mapper.js";
+import { CreateAssessmentRequest, DeleteAssessmentRequest, UpdateAssessmentRequest, UserAssessmentsResponse } from "./assessment.dtos.js";
 
 export class AssessmentService {
   public constructor(private readonly assessmentRepository: IAssessmentRepository, private readonly mediaService: MediaService) { }
@@ -16,15 +17,15 @@ export class AssessmentService {
       throw new AppError(409, "Avaliação já existe.");
     }
 
-    const repositoryInput = AssessmentMapper.toPrisma(data, media.id);
+    const repositoryInput = UserAssessmentMapper.toPrisma(data, media.id);
     await this.assessmentRepository.insert(repositoryInput);
   }
 
   public async update(data: UpdateAssessmentRequest): Promise<void> {
     const media = await this.mediaService.findOrCreate(data.mediaId, data.type);
 
-    if(!media.id) {
-      throw new AppError(400,'f')
+    if (!media.id) {
+      throw new AppError(400, 'f')
     }
 
     const itFound = await this.assessmentRepository.findById(data.userId, media.id);
@@ -66,8 +67,8 @@ export class AssessmentService {
     });
   };
 
-  public async mediaAssessments(mediaId: number, type: MediaType): Promise<any[]> {
+  public async mediaAssessments(mediaId: number, type: MediaType): Promise<MediaAssessmentsModelOutput[]> {
     const media = await this.mediaService.findOrCreate(mediaId, type);
-    return await this.assessmentRepository.mediaAssessments(media.id, type);
+    return await this.assessmentRepository.mediaAssessments(media.id);
   }
 }

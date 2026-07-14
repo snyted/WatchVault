@@ -1,5 +1,5 @@
 export class AppError extends Error {
-  public readonly timestamp = new Date().toLocaleString('pt-BR');
+  public readonly timestamp = new Date().toISOString();
 
   public constructor(public readonly status: number, message: string) {
     super(message);

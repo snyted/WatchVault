@@ -1,6 +1,6 @@
-import { Assessment as AssessmentModel, MediaType } from "@prisma/client";
+import { Assessment as AssessmentModel } from "@prisma/client";
 import prisma from "../../shared/config/prisma.js";
-import { IAssessmentRepository, MediaAssessmentsModel, UserAssessmentsModel, UserAssessmentsModelInput } from "./assessment.types.js";
+import { IAssessmentRepository, MediaAssessmentsModelOutput, UserAssessmentsModel, UserAssessmentsModelInput } from "./assessment.types.js";
 
 export class AssessmentRepositoryPrisma implements IAssessmentRepository {
     public async insert(data: UserAssessmentsModelInput): Promise<void> {
@@ -70,7 +70,7 @@ export class AssessmentRepositoryPrisma implements IAssessmentRepository {
         });
     }
 
-    public async mediaAssessments(mediaId: number, type: MediaType): Promise<any> {
+    public async mediaAssessments(mediaId: number): Promise<MediaAssessmentsModelOutput[]> {
         return prisma.assessment.findMany({
             where: {
                 mediaId
@@ -80,11 +80,6 @@ export class AssessmentRepositoryPrisma implements IAssessmentRepository {
                     select: {
                         username: true
                     }
-                },
-                media: {
-                    select: {
-                        title: true,
-                    },
                 },
                 review: true,
                 rating: true,
