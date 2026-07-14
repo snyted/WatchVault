@@ -9,9 +9,10 @@ export class MediaMapper {
             title: data.title,
             overview: data.overview,
             type: data.type,
-            releaseDate: (data.releaseDate?.toLocaleDateString("pt-br")) || null,
+            releaseDate: (data.releaseDate?.toISOString()) || null,
             posterPath: data.posterPath || null,
             backdropPath: data.backdropPath || null,
+            createdAt: data.createdAt.toISOString()
         }
     }
 

@@ -4,25 +4,10 @@ import { ToggleFavoriteDTO } from "./favorite.types.js";
 import { MediaRequestQuery } from "../media/media.types.js";
 import { AppError } from "../../shared/errors/app.error.js";
 import { MediaType } from "@prisma/client";
+import { FavoriteMapper } from "./favorite.mapper.js";
 
 export class FavoriteController {
     public constructor(private readonly favoriteService: FavoriteService) { }
-
-    public userFavorites = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const { id } = req.user;
-
-            const favs = await this.favoriteService.userFavorites(id);
-
-            res.status(200).json({
-                data: {
-                    favs
-                }
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
 
     public add = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
@@ -57,6 +42,23 @@ export class FavoriteController {
 
             const result = await this.favoriteService.remove(favoriteDTO);
             res.status(200).json({ data: { result } });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public userFavorites = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const { id, username } = req.user;
+
+            const favs = await this.favoriteService.userFavorites(id);
+            const favsResponse = favs.map(fav => FavoriteMapper.toResponse(fav))
+            res.status(200).json({
+                data: {
+                    user: username,
+                    favorites: favsResponse
+                }
+            });
         } catch (error) {
             next(error);
         }

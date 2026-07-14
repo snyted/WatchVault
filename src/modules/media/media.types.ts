@@ -16,6 +16,7 @@ export interface AppMedia {
     posterPath: string | null,
     backdropPath: string | null,
     type: MediaType,
+    createdAt: string
 }
 export type AppMediaType = MediaType
 

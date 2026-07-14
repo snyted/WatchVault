@@ -44,12 +44,10 @@ export class FavoriteRepositoryPrisma implements IFavoriteRepository {
         })
     }
 
-
-
     public async userList(userId: number): Promise<AppFavorite[]> {
         const favs = await prisma.favorite.findMany({
             where: {
-                id: userId,
+                userId,
             },
             include: {
                 media: true,

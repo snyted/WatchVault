@@ -13,6 +13,7 @@ export interface IFavoriteRepository {
 export interface AppFavorite {
     userId: number,
     media: AppMedia,
+    createdAt: Date,
 };
 
 
